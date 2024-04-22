@@ -10,14 +10,22 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+export const activeStyle = cva("text-primary");
 import { navConfig as components } from "@/lib/siteConf";
 import { NavItem } from "@/types";
+import { usePathname } from "next/navigation";
+import { cva } from "class-variance-authority";
+
+const navigationMenuTriggerStyle = cva(
+  "group inline-flex  h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-primary focus:bg-accent focus:text-primary  disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+);
 export function Navigation() {
+  const path = usePathname();
+  console.log(path);
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
+      <NavigationMenuList className="text-accent-foreground/50">
         {components.map((item) => {
           if (item.subMenu) {
             return (
@@ -31,6 +39,7 @@ export function Navigation() {
           }
           return (
             <LinkNav
+              active={path}
               label={item.label}
               key={item.label}
               icon={item.icon}
@@ -43,12 +52,21 @@ export function Navigation() {
   );
 }
 
-export const LinkNav = ({ label, icon, path }: NavItem) => {
+interface LinkNav extends NavItem {
+  active: string;
+}
+
+export const LinkNav = ({ label, icon, path, active }: LinkNav) => {
   const IconComponent = Icons[icon!];
   return (
     <NavigationMenuItem key={label}>
       <Link href={path!} legacyBehavior passHref>
-        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+        <NavigationMenuLink
+          className={cn(
+            navigationMenuTriggerStyle(),
+            `${active === path && activeStyle()}`
+          )}
+        >
           {IconComponent && <IconComponent className="size-4 mr-1" />}
           {label}
         </NavigationMenuLink>
@@ -66,7 +84,7 @@ export const MenuLinkNav = ({ label, icon, subMenu }: NavItem) => {
         {label}
       </NavigationMenuTrigger>
       <NavigationMenuContent>
-        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] ">
+        <ul className="grid w-[400px] gap-3 p-4 md:w-[400px] ">
           {subMenu?.map((component) => (
             <ListItem
               key={component.label}

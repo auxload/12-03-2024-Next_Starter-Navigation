@@ -2,35 +2,35 @@ import type { NavItem } from "@/types";
 export const navConfig: NavItem[] = [
   {
     label: "Dark",
-    icon: "Home",
+    // icon: "Home",
     path: "/dark",
   },
   {
     label: "About",
-    icon: "Book",
+    // icon: "Book",
     path: "/about",
   },
   {
     label: "Services",
-    icon: "Activity",
+    // icon: "Activity",
     // path:"/services"
     subMenu: [
       {
         label: "Service for pooping",
-        icon: "Apple",
+        // icon: "Apple",
 
         path: "/services/service1",
       },
       {
         label: "Service of trher nomber two",
-        icon: "AlarmClockOff",
+        // icon: "AlarmClockOff",
         path: "/services/service2",
       },
     ],
   },
   {
     label: "Contact",
-    icon: "Contact",
+    // icon: "Contact",
     path: "/contact",
   },
 ];

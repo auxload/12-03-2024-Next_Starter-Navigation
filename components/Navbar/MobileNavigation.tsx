@@ -26,13 +26,20 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
-  navigationMenuTriggerStyle,
+
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { navConfig } from "@/lib/siteConf";
 import { Button } from "../ui/button";
 import Branding from "../Branding";
+import { activeStyle } from "./Navigation";
+import { usePathname } from "next/navigation";
+import { cva } from "class-variance-authority";
+
+const navigationMenuTriggerStyle = cva(
+  "group inline-flex  h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-primary focus:bg-accent focus:text-primary  disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+);
 const MobileNavigation = () => {
   return (
     <div className="md:hidden">
@@ -59,9 +66,10 @@ const MobileNavigation = () => {
 };
 
 export const Nav = () => {
+  const path = usePathname();
   return (
     <NavigationMenu className="max-w-none block " orientation="vertical">
-      <NavigationMenuList className="max-w-none block space-x-0 space-y-2 ">
+      <NavigationMenuList className="max-w-none block space-x-0 space-y-2 text-accent-foreground/50 " >
         {navConfig.map((item) => {
           if (item.subMenu) {
             return (
@@ -75,6 +83,7 @@ export const Nav = () => {
           }
           return (
             <ItemLink
+              active={path}
               label={item.label}
               path={item.path}
               icon={item.icon}
@@ -89,6 +98,7 @@ export const Nav = () => {
 
 export const MenuItemLink = ({ label, icon, subMenu }: NavItem) => {
   const IconComponent = Icons[icon!];
+
   return (
     <Collapsible>
       <li>
@@ -101,11 +111,12 @@ export const MenuItemLink = ({ label, icon, subMenu }: NavItem) => {
           <Icons.ChevronDown className="ml-auto relative top-[1px] h-4 w-4 transition duration-200 group-data-[state=open]:rotate-180" />
         </CollapsibleTrigger>
       </li>
-      <CollapsibleContent className="flex pl-2 gap-2">
+      <CollapsibleContent className="flex pl-4 gap-2">
         <div className="bg-primary mt-2 w-[1px]"></div>
         <div className="flex-1 gap-2 pt-2 grid">
           {subMenu?.map((item) => (
             <ItemLink
+            active=""
               key={item.label}
               label={item.label}
               path={item.path}
@@ -117,7 +128,12 @@ export const MenuItemLink = ({ label, icon, subMenu }: NavItem) => {
     </Collapsible>
   );
 };
-export const ItemLink = ({ label, icon, path }: NavItem) => {
+
+interface ItemLink extends NavItem {
+  active: string;
+}
+
+export const ItemLink = ({ label, icon, path, active }: ItemLink) => {
   const IconComponent = Icons[icon!];
   return (
     <NavigationMenuItem className="block w-full max-w-none">
@@ -125,7 +141,9 @@ export const ItemLink = ({ label, icon, path }: NavItem) => {
         <NavigationMenuLink
           className={cn(
             navigationMenuTriggerStyle(),
-            "max-w-none w-full justify-start"
+            `max-w-none w-full justify-start ${
+              active === path && activeStyle()
+            }`
           )}
         >
           {IconComponent && <IconComponent className="size-4 mr-1" />}
