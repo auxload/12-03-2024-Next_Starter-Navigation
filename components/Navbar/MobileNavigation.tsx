@@ -36,10 +36,7 @@ import Branding from "../Branding";
 import { activeStyle } from "./Navigation";
 import { usePathname } from "next/navigation";
 import { cva } from "class-variance-authority";
-
-const navigationMenuTriggerStyle = cva(
-  "group inline-flex  h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-primary focus:bg-accent focus:text-primary  disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-);
+import { navigationMenuTriggerStyle } from "./Navigation";
 const MobileNavigation = () => {
   return (
     <div className="md:hidden">
@@ -113,7 +110,7 @@ export const MenuItemLink = ({ label, icon, subMenu }: NavItem) => {
       </li>
       <CollapsibleContent className="flex pl-4 gap-2">
         <div className="bg-primary mt-2 w-[1px]"></div>
-        <div className="flex-1 gap-2 pt-2 grid">
+        <ul className="flex-1 gap-2 pt-2 grid">
           {subMenu?.map((item) => (
             <ItemLink
             active=""
@@ -123,7 +120,7 @@ export const MenuItemLink = ({ label, icon, subMenu }: NavItem) => {
               icon={item.icon}
             />
           ))}
-        </div>
+        </ul>
       </CollapsibleContent>
     </Collapsible>
   );

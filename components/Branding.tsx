@@ -3,8 +3,8 @@ import React from "react";
 
 const Branding = () => {
   return (
-    <Link href={"/"} className="text-center text-2xl font-bold  ">
-      Acme
+    <Link href={"/"} className="mr-8 text-center text-2xl font-bold  ">
+      AllureGym
     </Link>
   );
 };
